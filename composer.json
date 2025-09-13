@@ -1,0 +1,45 @@
+{
+  "name": "crasivo/bitrix-whoops",
+  "description": "Whoops library adapter for 1C-Bitrix",
+  "type": "library",
+  "version": "0.0.1",
+  "license": "MIT",
+  "homepage": "https://github.com/crasivo/bitrix-whoops",
+  "keywords": [
+    "bitrix",
+    "exception",
+    "handling"
+  ],
+  "authors": [
+    {
+      "name": "Crasivo Dev",
+      "email": "crasivo.dev@gmail.com",
+      "role": "developer"
+    }
+  ],
+  "support": {
+    "issues": "https://github.com/crasivo/bitrix-whoops/issues",
+    "source": "https://github.com/crasivo/bitrix-whoops"
+  },
+  "autoload": {
+    "psr-4": {
+      "Crasivo\\Bitrix\\Monolog\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^7.2 || ^8.0",
+    "filp/whoops": "^2.18"
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-legacy": "0.x-dev",
+      "dev-main": "1.x-dev"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
