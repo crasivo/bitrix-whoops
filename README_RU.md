@@ -29,7 +29,7 @@ $ composer require crasivo/bitrix-whoops
 Для этого достаточно добавить в указанный файл одну строчку кода.
 
 ```php
-Crasivo\Bitrix\Whoops\HttpExceptionHandlerOutput::register();
+Crasivo\Bitrix\Whoops\ExceptionHandlerOutput::register();
 ```
 
 Для проверки работоспособности необходимо активировать режим отладки через параметр `exception_handling.debug` в файле `.settings.php`

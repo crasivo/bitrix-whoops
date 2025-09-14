@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Crasivo\Bitrix\Whoops;
 
 use Bitrix\Main\Application;
@@ -10,7 +8,7 @@ use Bitrix\Main\HttpResponse;
 use Whoops\Run as WhoopsRun;
 use Whoops\RunInterface;
 
-class HttpExceptionHandlerOutput implements IExceptionHandlerOutput
+class ExceptionHandlerOutput implements IExceptionHandlerOutput
 {
     /** @var WhoopsRun */
     protected $whoopsRun;

@@ -1,7 +1,5 @@
 <?php
 
-declare (strict_types=1);
-
 namespace Crasivo\Bitrix\Whoops\Handlers;
 
 class PrettyPageHandler extends \Whoops\Handler\PrettyPageHandler

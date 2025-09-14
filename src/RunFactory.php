@@ -1,11 +1,7 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Crasivo\Bitrix\Whoops;
 
-use Bitrix\Main\Application;
-use Bitrix\Main\Context;
 use Crasivo\Bitrix\Whoops\Handlers\PrettyPageHandler;
 use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PlainTextHandler;
@@ -56,46 +52,58 @@ class RunFactory
     }
 
     /**
-     * @return array|false
+     * @internal
+     *
+     * @param SystemFacade|null $systemFacade
+     * @return RunInterface
      */
-    private static function getHeaders()
+    public static function createCli(?SystemFacade $systemFacade = null): RunInterface
     {
-        if (function_exists('getallheaders')) {
-            return getallheaders();
-        }
-        if (function_exists('apache_request_headers')) {
-            return apache_request_headers();
-        }
+        $run = new Run($systemFacade);
+        $run->pushHandler(new PlainTextHandler());
 
-        return false;
+        return $run;
     }
 
     /**
+     * Returns the default Whoops run.
+     *
      * @param SystemFacade|null $systemFacade
      * @return RunInterface
      */
     public static function createDefault(?SystemFacade $systemFacade = null): RunInterface
     {
+        return PHP_SAPI === 'cli'
+            ? static::createCli($systemFacade)
+            : static::createHttp($systemFacade);
+    }
+
+    /**
+     * @internal
+     *
+     * @param SystemFacade|null $systemFacade
+     * @return RunInterface
+     */
+    public static function createHttp(?SystemFacade $systemFacade = null): RunInterface
+    {
         $run = new Run($systemFacade);
 
-        // cli or iframe
-        if (PHP_SAPI === 'cli' || (str_starts_with($_SERVER['REQUEST_URI'], '/bitrix/admin') && $_REQUEST['mode'] === 'frame')) {
+        // check admin frame
+        if (0 === stripos((string)$_SERVER['REQUEST_URI'], '/bitrix/admin') && (string)$_REQUEST['mode'] === 'frame') {
             $run->pushHandler(new PlainTextHandler());
 
             return $run;
         }
 
-        // check headers
-        $headers = static::getHeaders() ?? [];
-        $accept = $headers['Accept'] ?? 'text/html';
+        $accept = $_SERVER['HTTP_ACCEPT'] ?? '*/*';
         switch (true) {
-            case str_contains($accept, 'text/html'):
+            case false !== stripos($accept, '*/*') || false !== stripos($accept, 'html'):
                 $run->pushHandler(static::createPrettyPageHandler());
                 break;
-            case str_contains($accept, 'json'):
+            case false !== stripos($accept, 'json'):
                 $run->pushHandler(static::createJsonResponseHandler());
                 break;
-            case str_contains($accept, 'xml'):
+            case false !== stripos($accept, 'xml'):
                 $run->pushHandler(new XmlResponseHandler());
                 break;
             default:

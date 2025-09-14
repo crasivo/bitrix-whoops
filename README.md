@@ -29,7 +29,7 @@ Next, you need to register the handler via [init.php](https://dev.1c-bitrix.ru/l
 To do this, simply add one line of code to the specified file.
 
 ```php
-Crasivo\Bitrix\Whoops\HttpExceptionHandlerOutput::register();
+Crasivo\Bitrix\Whoops\ExceptionHandlerOutput::register();
 ```
 
 To check the functionality, you need to activate the debug mode via the `exception_handling.debug` parameter in the `.settings.php` file
