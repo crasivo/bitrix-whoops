@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Crasivo\Bitrix\Whoops;
 
+use Bitrix\Main\Application;
+use Bitrix\Main\Context;
 use Crasivo\Bitrix\Whoops\Handlers\PrettyPageHandler;
 use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PlainTextHandler;
@@ -69,29 +71,22 @@ class RunFactory
     }
 
     /**
-     * @return string
-     */
-    private static function getAcceptHeader(): string
-    {
-        return self::getHeaders()['Accept'] ?? 'text/html';
-    }
-
-    /**
      * @param SystemFacade|null $systemFacade
      * @return RunInterface
      */
     public static function createDefault(?SystemFacade $systemFacade = null): RunInterface
     {
-        // check cli mode
         $run = new Run($systemFacade);
-        $headers = static::getHeaders();
-        if (PHP_SAPI === 'cli' || !is_array($headers)) {
+
+        // cli or iframe
+        if (PHP_SAPI === 'cli' || (str_starts_with($_SERVER['REQUEST_URI'], '/bitrix/admin') && $_REQUEST['mode'] === 'frame')) {
             $run->pushHandler(new PlainTextHandler());
 
             return $run;
         }
 
         // check headers
+        $headers = static::getHeaders() ?? [];
         $accept = $headers['Accept'] ?? 'text/html';
         switch (true) {
             case str_contains($accept, 'text/html'):
