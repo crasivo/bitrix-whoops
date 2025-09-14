@@ -2,7 +2,7 @@
   "name": "crasivo/bitrix-whoops",
   "description": "Whoops library adapter for 1C-Bitrix",
   "type": "library",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "homepage": "https://github.com/crasivo/bitrix-whoops",
   "keywords": [
